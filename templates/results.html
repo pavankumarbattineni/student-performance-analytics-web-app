@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analysis Results</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Main container */
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        /* Headings */
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: #3498db;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+
+        h3 {
+            color: #2980b9;
+            font-size: 1.4em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Paragraphs and lists */
+        p {
+            font-size: 1.1em;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        /* Correlation styling */
+        .correlation {
+            position: relative;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .correlation.positive {
+            color: #2ecc71;
+        }
+
+        .correlation.negative {
+            color: #e74c3c;
+        }
+
+        .correlation.neutral {
+            color: #7f8c8d;
+        }
+
+        .correlation:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip {
+            visibility: hidden;
+            width: 250px;
+            background-color: #34495e;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9em;
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #34495e transparent transparent transparent;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            font-size: 1.1em;
+            color: #333;
+            padding: 8px 0;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin: 5px 0;
+        }
+
+        /* Highlight failing students */
+        .failing li {
+            border-left: 4px solid #e74c3c;
+            color: #e74c3c;
+        }
+
+        /* Charts */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            margin: 10px 0;
+        }
+
+        /* No data message */
+        .no-data {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            text-align: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .upload-button {
+            background-color: #2ecc71;
+        }
+
+        .upload-button:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .upload-button:active {
+            transform: translateY(0);
+        }
+
+        .download-button {
+            background-color: #e67e22;
+        }
+
+        .download-button:hover {
+            background-color: #d35400;
+            transform: translateY(-2px);
+        }
+
+        .download-button:active {
+            transform: translateY(0);
+        }
+
+        .logout-button {
+            background-color: #e74c3c;
+        }
+
+        .logout-button:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .logout-button:active {
+            transform: translateY(0);
+        }
+
+        /* Button container */
+        .button-container {
+            text-align: center;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            h3 {
+                font-size: 1.2em;
+            }
+            p, li {
+                font-size: 1em;
+            }
+            .tooltip {
+                width: 200px;
+                margin-left: -100px;
+            }
+            .button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Performance Analysis</h1>
+
+        <div class="section">
+            <h2>Overall Statistics</h2>
+            <p>Class Average: {{ stats.class_avg|round(2) }}</p>
+            <p>Class Median: {{ stats.class_median|round(2) }}</p>
+            {% if stats.correlation %}
+            <p>Attendance vs Performance Correlation: 
+                <span class="correlation {% if stats.correlation > 0 %}positive{% elif stats.correlation < 0 %}negative{% else %}neutral{% endif %}">
+                    {{ stats.correlation|round(2) }}
+                    <span class="tooltip">
+                        {% set abs_correlation = stats.correlation|abs %}
+                        {% if abs_correlation >= 0.7 %}
+                            {% if stats.correlation > 0 %}
+                                Strong positive correlation: Higher attendance is strongly associated with better performance.
+                            {% else %}
+                                Strong negative correlation: Higher attendance is strongly associated with lower performance.
+                            {% endif %}
+                        {% elif abs_correlation >= 0.3 %}
+                            {% if stats.correlation > 0 %}
+                                Moderate positive correlation: Higher attendance is moderately associated with better performance.
+                            {% else %}
+                                Moderate negative correlation: Higher attendance is moderately associated with lower performance.
+                            {% endif %}
+                        {% elif abs_correlation > 0 %}
+                            {% if stats.correlation > 0 %}
+                                Weak positive correlation: Higher attendance has a slight association with better performance.
+                            {% else %}
+                                Weak negative correlation: Higher attendance has a slight association with lower performance.
+                            {% endif %}
+                        {% else %}
+                            No correlation: Attendance and performance are unrelated.
+                        {% endif %}
+                    </span>
+                </span>
+            </p>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>Top Performers</h2>
+            <ul>
+            {% for student in stats.top_performers %}
+                <li>{{ student.Name }}: {{ student.AverageScore|round(2) }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Bottom Performers</h2>
+            <ul>
+            {% for student in stats.bottom_performers %}
+                <li>{{ student.Name }}: {{ student.AverageScore|round(2) }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+
+        <div class="section failing">
+            <h2>Failing Students (<60)</h2>
+            {% if stats.failing_students %}
+            <ul>
+            {% for student in stats.failing_students %}
+                <li>{{ student.Name }}: {{ student.AverageScore|round(2) }}</li>
+            {% endfor %}
+            </ul>
+            {% else %}
+            <p class="no-data">None</p>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>Visualizations</h2>
+            <h3>Grade Distribution</h3>
+            {% if grade_dist %}
+            <img src="data:image/png;base64,{{ grade_dist }}" alt="Grade Distribution">
+            {% else %}
+            <p class="no-data">No valid data available for grade distribution plot.</p>
+            {% endif %}
+
+            {% if attendance_plot %}
+            <h3>Attendance vs Performance</h3>
+            <img src="data:image/png;base64,{{ attendance_plot }}" alt="Attendance vs Performance">
+            {% else %}
+            <p class="no-data">No valid data available for attendance vs performance plot.</p>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>Insights</h2>
+            <ul>
+            {% for insight in insights %}
+                <li>{{ insight }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+
+        <div class="button-container">
+            <a href="{{ url_for('upload_file') }}" class="button upload-button">Upload Another File</a>
+            <form action="{{ url_for('download_grade_cards') }}" method="post" style="display: inline;">
+                <button type="submit" class="button download-button">Download Grade Cards</button>
+            </form>
+            <a href="{{ url_for('logout') }}" class="button logout-button">Logout</a>
+        </div>
+    </div>
+</body>
+</html>
